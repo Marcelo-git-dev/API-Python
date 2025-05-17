@@ -1,0 +1,73 @@
+<!-- templates/adicionar_evento.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Evento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-calendar-plus"></i> Adicionar Novo Evento</h1>
+            <p>Cadastre ensaios, cultos e outros eventos</p>
+        </header>
+        
+        <main class="main-content">
+            <form class="modern-form" method="POST">
+                <div class="form-group">
+                    <label for="nome"><i class="fas fa-heading"></i> Nome do Evento</label>
+                    <input type="text" id="nome" name="nome" placeholder="Ex: Culto de Domingo, Ensaio do Coral" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="data"><i class="fas fa-calendar-day"></i> Data e Hora</label>
+                    <input type="datetime-local" id="data" name="data" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tipo"><i class="fas fa-tag"></i> Tipo de Evento</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="culto">Culto</option>
+                        <option value="ensaio">Ensaio</option>
+                        <option value="reuniao">Reunião</option>
+                        <option value="evento_especial">Evento Especial</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Salvar Evento
+                    </button>
+                    <a href="{{ url_for('index') }}" class="btn-secondary">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        // Configuração inicial da data/hora
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            // Ajusta para o próximo horário redondo (ex: 14:00 se agora for 13:45)
+            const minutes = now.getMinutes();
+            now.setMinutes(minutes < 30 ? 30 : 0);
+            now.setHours(minutes < 30 ? now.getHours() : now.getHours() + 1);
+            
+            // Formata para o input datetime-local
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutesFormatted = String(now.getMinutes()).padStart(2, '0');
+            
+            document.getElementById('data').value = `${year}-${month}-${day}T${hours}:${minutesFormatted}`;
+        });
+    </script>
+</body>
+</html>
