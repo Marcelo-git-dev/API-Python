@@ -26,7 +26,33 @@ def relatorios():
     membros = db.get_membros()
     eventos = db.get_eventos()
     presencas = db.get_presencas()
+
+# Adicionado estas novas rotas para cadastro de membros e eventos
+@app.route('/adicionar_membro', methods=['GET', 'POST'])
+def adicionar_membro():
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        funcao = request.form.get('funcao')
+        
+        if nome:
+            db.adicionar_membro(nome, funcao)
+            return redirect(url_for('index'))
     
+    return render_template('adicionar_membro.html')
+
+@app.route('/adicionar_evento', methods=['GET', 'POST'])
+def adicionar_evento():
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        data = request.form.get('data')
+        tipo = request.form.get('tipo')
+        
+        if nome and data and tipo:
+            db.adicionar_evento(nome, data, tipo)
+            return redirect(url_for('index'))
+    
+    return render_template('adicionar_evento.html')
+
     # Calcular métricas
     metricas = {}
     for membro in membros:

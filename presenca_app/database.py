@@ -70,5 +70,24 @@ def registrar_presenca(membro_id, evento_id, presente):
     conn.commit()
     conn.close()
 
+# Adicionado estas novas funções ao database
+def adicionar_membro(nome, funcao):
+    conn = get_db_connection()
+    conn.execute(
+        'INSERT INTO membros (nome, funcao) VALUES (?, ?)',
+        (nome, funcao)
+    )
+    conn.commit()
+    conn.close()
+
+def adicionar_evento(nome, data, tipo):
+    conn = get_db_connection()
+    conn.execute(
+        'INSERT INTO eventos (nome, data, tipo) VALUES (?, ?, ?)',
+        (nome, data, tipo)
+    )
+    conn.commit()
+    conn.close()
+
 # Inicializar o banco de dados
 init_db()
