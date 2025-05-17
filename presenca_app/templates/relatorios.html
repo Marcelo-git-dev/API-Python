@@ -1,0 +1,44 @@
+<!-- templates/relatorios.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios de Presença</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Relatórios de Presença</h1>
+        
+        <div class="section">
+            <h2>Métricas por Membro</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Membro</th>
+                        <th>Presentes</th>
+                        <th>Faltas</th>
+                        <th>Percentual de Presença</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for membro_id, metrica in metricas.items() %}
+                    <tr>
+                        <td>{{ metrica.nome }}</td>
+                        <td>{{ metrica.presentes }}</td>
+                        <td>{{ metrica.faltas }}</td>
+                        <td>{{ metrica.percentual_presenca }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <a href="{{ url_for('index') }}" class="btn">Voltar</a>
+            <button onclick="window.print()" class="btn">Imprimir Relatório</button>
+        </div>
+    </div>
+</body>
+</html>
