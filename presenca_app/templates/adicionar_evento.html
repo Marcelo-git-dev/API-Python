@@ -1,4 +1,3 @@
-<!-- templates/adicionar_evento.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -51,15 +50,12 @@
     </div>
 
     <script>
-        // Configuração inicial da data/hora
         document.addEventListener('DOMContentLoaded', function() {
             const now = new Date();
-            // Ajusta para o próximo horário redondo (ex: 14:00 se agora for 13:45)
             const minutes = now.getMinutes();
             now.setMinutes(minutes < 30 ? 30 : 0);
             now.setHours(minutes < 30 ? now.getHours() : now.getHours() + 1);
             
-            // Formata para o input datetime-local
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');

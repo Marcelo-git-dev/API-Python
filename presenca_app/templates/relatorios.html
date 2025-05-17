@@ -1,4 +1,3 @@
-<!-- templates/relatorios.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,38 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatórios de Presença</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Relatórios de Presença</h1>
+        <header class="header">
+            <h1><i class="fas fa-chart-bar"></i> Relatórios de Presença</h1>
+            <p>Métricas e estatísticas de participação</p>
+        </header>
         
-        <div class="section">
-            <h2>Métricas por Membro</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Membro</th>
-                        <th>Presentes</th>
-                        <th>Faltas</th>
-                        <th>Percentual de Presença</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for membro_id, metrica in metricas.items() %}
-                    <tr>
-                        <td>{{ metrica.nome }}</td>
-                        <td>{{ metrica.presentes }}</td>
-                        <td>{{ metrica.faltas }}</td>
-                        <td>{{ metrica.percentual_presenca }}%</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="stats-summary">
+            <div class="stat-card">
+                <h3>Total de Membros</h3>
+                <p>{{ total_membros }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total de Eventos</h3>
+                <p>{{ total_eventos }}</p>
+            </div>
         </div>
         
-        <div class="section">
-            <a href="{{ url_for('index') }}" class="btn">Voltar</a>
-            <button onclick="window.print()" class="btn">Imprimir Relatório</button>
+        <main class="main-content">
+            <h2><i class="fas fa-users"></i> Presença por Membro</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Membro</th>
+                            <th>Função</th>
+                            <th>Presentes</th>
+                            <th>Faltas</th>
+                            <th>% Presença</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for metrica in metricas %}
+                        <tr>
+                            <td>{{ metrica.nome }}</td>
+                            <td>{{ metrica.funcao if metrica.funcao else '-' }}</td>
+                            <td>{{ metrica.presentes }}</td>
+                            <td>{{ metrica.faltas }}</td>
+                            <td>
+                                <div class="progress-container">
+                                    {% set percentual = metrica.percentual_presenca|default(0)|float %}
+                                    <div class="progress-bar" style="width: {{ percentual }}%; min-width: 20px;">
+                                        {{ "%.1f"|format(percentual) }}%
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if metrica.percentual_presenca >= 80 %}
+                                    <span class="status-badge excellent"><i class="fas fa-check-circle"></i> Excelente</span>
+                                {% elif metrica.percentual_presenca >= 50 %}
+                                    <span class="status-badge good"><i class="fas fa-check"></i> Bom</span>
+                                {% else %}
+                                    <span class="status-badge poor"><i class="fas fa-exclamation-triangle"></i> Baixo</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <h2><i class="fas fa-calendar-alt"></i> Presença por Evento</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Evento</th>
+                            <th>Tipo</th>
+                            <th>Data</th>
+                            <th>Presentes</th>
+                            <th>Faltas</th>
+                            <th>% Presença</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for evento in metricas_eventos %}
+                        <tr>
+                            <td>{{ evento.nome }}</td>
+                            <td>{{ evento.tipo|capitalize }}</td>
+                            <td>{{ evento.data|format_date }}</td>
+                            <td>{{ evento.presentes }}</td>
+                            <td>{{ evento.faltas }}</td>
+                            <td>
+                                <div class="progress-container">
+                                    {% set percentual = evento.percentual_presenca|default(0)|float %}
+                                    <div class="progress-bar" style="width: {{ percentual }}%; min-width: 20px;">
+                                        {{ "%.1f"|format(percentual) }}%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+        
+        <div class="actions">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <button onclick="window.print()" class="btn btn-secondary">
+                <i class="fas fa-print"></i> Imprimir Relatório
+            </button>
         </div>
     </div>
 </body>

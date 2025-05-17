@@ -1,4 +1,3 @@
-# database.py
 import sqlite3
 from datetime import datetime
 
@@ -11,7 +10,6 @@ def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # Criar tabelas se não existirem
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS membros (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,7 +23,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
             data TEXT NOT NULL,
-            tipo TEXT NOT NULL -- 'ensaio' ou 'culto'
+            tipo TEXT NOT NULL
         )
     ''')
     
@@ -70,7 +68,6 @@ def registrar_presenca(membro_id, evento_id, presente):
     conn.commit()
     conn.close()
 
-# Adicionado estas novas funções ao database
 def adicionar_membro(nome, funcao):
     conn = get_db_connection()
     conn.execute(
@@ -89,5 +86,4 @@ def adicionar_evento(nome, data, tipo):
     conn.commit()
     conn.close()
 
-# Inicializar o banco de dados
 init_db()
